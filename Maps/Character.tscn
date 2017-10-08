@@ -1,9 +1,14 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://Scripts/Character.gd" type="Script" id=1]
 [ext_resource path="res://Assets/PC_Tail.png" type="Texture" id=2]
 [ext_resource path="res://Assets/PC_Body.png" type="Texture" id=3]
 [ext_resource path="res://Assets/PC_Head.png" type="Texture" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 10, 10 )
 
 [node name="Character" type="Node2D"]
 
@@ -28,6 +33,26 @@ texture = ExtResource( 3 )
 
 texture = ExtResource( 4 )
 
+[node name="Area2D" type="Area2D" parent="Head"]
+
+input/pickable = true
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 5, 0, 0, 5, 0, 0 )
+shapes/0/trigger = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision/layers = 2
+collision/mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Head/Area2D"]
+
+transform/scale = Vector2( 5, 5 )
+shape = SubResource( 1 )
+trigger = true
+_update_shape_index = 0
+
 [node name="RayCast2D" type="RayCast2D" parent="."]
 
 enabled = true
@@ -36,5 +61,7 @@ layer_mask = 1
 type_mask = 15
 
 [node name="Position2D" type="Position2D" parent="."]
+
+[connection signal="area_enter" from="Head/Area2D" to="." method="_on_Area2D_area_enter"]
 
 

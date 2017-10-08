@@ -5,26 +5,24 @@ var distanceBetweenSections = 100
 var snakePositions = []
 var snakeParts = []
 
+signal onBugCollide(bug)
+
 var bodyTexture = preload("res://Assets/PC_Body.png")
 
 func _ready():
 	set_process(true)
+	set_fixed_process(true)
 	snakeParts.append(get_node("Tail"))
 	snakeParts.append(get_node("Body"))
 	snakeParts.append(get_node("Body1"))
 	snakePositions.append(Vector2(0, 0))
 	snakePositions.append(Vector2(0, 0))
 	snakePositions.append(Vector2(0, 0))
-	#get_node("RayCast2D").add_exception(get_node("Head"))
-	#get_node("RayCast2D").add_exception(get_node("Body1"))
-	#get_node("RayCast2D").add_exception(get_node("Body"))
-	#get_node("RayCast2D").add_exception(get_node("Tail"))
 	pass
 
 func _set_target(target):
-	#get_node("Position2D").set_pos(target)
-	#get_node("RayCast2D").set_pos(get_node("Head").get_pos())
 	get_node("RayCast2D").set_cast_to(target)
+	get_node("RayCast2D").force_raycast_update()
 	if get_node("RayCast2D").is_colliding():
 		get_node("Position2D").set_pos(get_node("RayCast2D").get_collision_point())
 	else:
@@ -39,6 +37,10 @@ func add_new_segment():
 	add_child(newseg)
 	newseg.set_z(-1)
 	snakeParts.append(newseg)
+	pass
+
+func _fixed_process(delta):
+	
 	pass
 
 func _process(delta):
@@ -61,4 +63,9 @@ func _process(delta):
 	
 	if (snakePositions.size() > snakeLength):
 		snakePositions.pop_front()
+	pass
+
+
+func _on_Area2D_area_enter( area ):
+	emit_signal("onBugCollide", area.get_parent().get_parent())
 	pass
