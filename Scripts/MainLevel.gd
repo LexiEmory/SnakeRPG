@@ -3,6 +3,7 @@ extends Node2D
 func _ready():
 	set_process(true)
 	#get_node("Camera2D").set_owner(get_node("Character/Head"))
+	get_node("Character").add_new_segment()
 	pass
 
 func _process(delta):
