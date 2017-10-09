@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://Scripts/MainLevel.gd" type="Script" id=1]
 [ext_resource path="res://Assets/MainLevelTileSet.tres" type="TileSet" id=2]
@@ -8,6 +8,34 @@
 [ext_resource path="res://Assets/XP_Icon.png" type="Texture" id=6]
 [ext_resource path="res://Assets/HealthBar.png" type="Texture" id=7]
 [ext_resource path="res://Assets/XPBar.png" type="Texture" id=8]
+[ext_resource path="res://Assets/conformity.fnt" type="BitmapFont" id=9]
+[ext_resource path="res://Scripts/Input.gd" type="Script" id=10]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 1, 0, 0, 1 )
+light_color = Color( 1, 0, 0, 1 )
+dark_color = Color( 1, 0.00372314, 0.00372314, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+bg_color = Color( 1, 1, 1, 1 )
+light_color = Color( 1, 1, 1, 1 )
+dark_color = Color( 1, 1, 1, 1 )
+border_size = 0
+border_blend = true
+draw_bg = true
 
 [node name="MainLevel" type="Node2D"]
 
@@ -101,11 +129,51 @@ transform/pos = Vector2( 217.091, 99.5648 )
 transform/scale = Vector2( 0.45, 0.45 )
 texture = ExtResource( 6 )
 
+[node name="HealthProgress" type="ProgressBar" parent="CanvasLayer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 13.0
+margin/top = 15.0
+margin/right = 186.0
+margin/bottom = 64.0
+custom_styles/fg = SubResource( 1 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 100.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
+
 [node name="HealthBar" type="Sprite" parent="CanvasLayer"]
 
 transform/pos = Vector2( 99.2289, 37.5648 )
 transform/scale = Vector2( 0.45, 0.45 )
 texture = ExtResource( 7 )
+
+[node name="XpProgress" type="ProgressBar" parent="CanvasLayer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 13.0
+margin/top = 77.0
+margin/right = 186.0
+margin/bottom = 126.0
+custom_styles/fg = SubResource( 2 )
+range/min = 0.0
+range/max = 100.0
+range/step = 1.0
+range/page = 0.0
+range/value = 0.0
+range/exp_edit = false
+range/rounded = false
+percent/visible = false
 
 [node name="XpBar" type="Sprite" parent="CanvasLayer"]
 
@@ -113,6 +181,53 @@ transform/pos = Vector2( 99.2289, 99.5648 )
 transform/scale = Vector2( 0.45, 0.45 )
 texture = ExtResource( 8 )
 
+[node name="GameOverPanel" type="Panel" parent="CanvasLayer"]
+
+visibility/opacity = 0.5
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 1024.0
+margin/bottom = 600.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="GameOverText" type="Label" parent="CanvasLayer"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 512.0
+margin/top = 300.0
+margin/right = 591.0
+margin/bottom = 326.0
+custom_fonts/font = ExtResource( 9 )
+text = "Game Over!"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Timer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = false
+autostart = true
+
+[node name="InputConsumer" type="Node2D" parent="."]
+
+process/pause_mode = 2
+script/script = ExtResource( 10 )
+
 [connection signal="onBugCollide" from="Character" to="." method="_on_Character_onBugCollide"]
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
 
 
